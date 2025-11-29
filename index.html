@@ -10,16 +10,23 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     
     <style>
-        /* --- CSS 變數定義 --- */
+        /* --- CSS 變數定義 (深色模式) --- */
         :root {
-            --primary-color: #234e52; /* 更深沈專業的青綠色 */
-            --secondary-color: #319795; /* 亮青色 */
-            --accent-color: #d69e2e; /* 金色強調，用於重點 */
-            --bg-sidebar: #1a202c; /* 深色側邊欄 */
-            --bg-content: #f7fafc; /* 淺灰內容背景 */
-            --text-main: #2d3748;
-            --text-light: #4a5568;
-            --white: #ffffff;
+            /* 調整為適合深色背景的亮青色 */
+            --primary-color: #81e6d9; 
+            --secondary-color: #4fd1c5; 
+            --accent-color: #f6ad55; /* 琥珀橘金 */
+            
+            /* 背景色系 */
+            --bg-sidebar: #171923; /* 極深灰側邊欄 */
+            --bg-content: #1a202c; /* 深灰內容背景 */
+            --bg-card: #2d3748;    /* 卡片與區塊背景 */
+            
+            /* 文字色系 */
+            --text-main: #edf2f7;  /* 淺灰白主要文字 */
+            --text-light: #a0aec0; /* 次要文字 */
+            --white: #ffffff;      /* 純白 (用於深色底上的文字或圖示) */
+            
             --font-main: 'Noto Sans TC', sans-serif;
             --font-serif: 'Noto Serif TC', serif;
             --sidebar-width: 280px;
@@ -45,13 +52,14 @@
         .sidebar {
             width: var(--sidebar-width);
             background-color: var(--bg-sidebar);
-            color: var(--white);
+            color: var(--text-light);
             display: flex;
             flex-direction: column;
             height: 100%;
             flex-shrink: 0;
-            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            box-shadow: 4px 0 10px rgba(0,0,0,0.3); /* 加深陰影 */
             z-index: 100;
+            border-right: 1px solid rgba(255,255,255,0.05);
         }
 
         .logo-area {
@@ -69,7 +77,7 @@
         
         .logo-subtitle {
             font-size: 0.8rem;
-            color: #a0aec0;
+            color: #718096;
             margin-top: 5px;
             text-transform: uppercase;
             letter-spacing: 2px;
@@ -88,7 +96,7 @@
             cursor: pointer;
             transition: all 0.3s;
             border-left: 4px solid transparent;
-            color: #cbd5e0;
+            color: var(--text-light);
             font-weight: 500;
         }
 
@@ -98,9 +106,9 @@
         }
 
         .nav-item.active {
-            background-color: rgba(49, 151, 149, 0.15);
-            color: var(--secondary-color);
-            border-left-color: var(--secondary-color);
+            background-color: rgba(129, 230, 217, 0.1);
+            color: var(--primary-color);
+            border-left-color: var(--primary-color);
         }
 
         .nav-item i {
@@ -114,7 +122,7 @@
             font-size: 0.8rem;
             color: #718096;
             text-align: center;
-            border-top: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255,255,255,0.05);
         }
 
         /* --- 主內容區塊 (Main Content) --- */
@@ -155,7 +163,8 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+            /* 調整漸層使其在深色模式下更自然融入 */
+            background: linear-gradient(to bottom, rgba(26, 32, 44, 0.1), rgba(26, 32, 44, 1)); 
         }
 
         .header-title {
@@ -169,12 +178,14 @@
             font-family: var(--font-serif);
             font-size: 2.8rem;
             margin-bottom: 0.5rem;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+            text-shadow: 0 4px 6px rgba(0,0,0,0.5);
+            color: var(--primary-color);
         }
 
         .header-title p {
             font-size: 1.1rem;
             opacity: 0.9;
+            color: var(--text-main);
         }
 
         /* --- 文章內容樣式 --- */
@@ -204,6 +215,8 @@
             display: flex;
             align-items: center;
             gap: 10px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            padding-bottom: 10px;
         }
         
         .content-block h3 i {
@@ -214,6 +227,11 @@
         .content-block p {
             margin-bottom: 1.2rem;
             text-align: justify;
+            color: var(--text-light);
+        }
+        
+        strong {
+            color: var(--text-main);
         }
 
         /* 雙欄圖文排版 */
@@ -227,14 +245,20 @@
 
         .grid-img {
             border-radius: 12px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.5);
             width: 100%;
             height: auto;
+            /* 稍微降低圖片亮度以適應深色模式 */
+            filter: brightness(0.9);
         }
 
         /* 列表樣式 */
         .feature-list {
             list-style: none;
+            background-color: var(--bg-card); /* 增加背景色塊 */
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
         }
 
         .feature-list li {
@@ -261,8 +285,9 @@
             height: 0;
             overflow: hidden;
             border-radius: 12px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0,0,0,0.4);
             margin: 2rem 0;
+            background-color: #000;
         }
         
         .video-wrapper iframe {
@@ -291,6 +316,8 @@
                 align-items: center;
                 padding: 0 1rem;
                 z-index: 1000;
+                border-right: none;
+                border-bottom: 1px solid rgba(255,255,255,0.05);
             }
             
             .logo-area {
@@ -376,7 +403,7 @@
     <!-- 側邊導覽選單 -->
     <nav class="sidebar">
         <div class="logo-area">
-            <h1>VET MEDICINE</h1>
+            <!-- 已移除 VET MEDICINE -->
             <div class="logo-subtitle">Comprehensive Guide</div>
         </div>
         
