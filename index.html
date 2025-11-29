@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>獸醫學概論 | Comprehensive Veterinary Medicine</title>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@300;400;500;700&family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <!-- FontAwesome for Icons -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        /* --- CSS 變數定義 --- */
+        :root {
+            --primary-color: #234e52; /* 更深沈專業的青綠色 */
+            --secondary-color: #319795; /* 亮青色 */
+            --accent-color: #d69e2e; /* 金色強調，用於重點 */
+            --bg-sidebar: #1a202c; /* 深色側邊欄 */
+            --bg-content: #f7fafc; /* 淺灰內容背景 */
+            --text-main: #2d3748;
+            --text-light: #4a5568;
+            --white: #ffffff;
+            --font-main: 'Noto Sans TC', sans-serif;
+            --font-serif: 'Noto Serif TC', serif;
+            --sidebar-width: 280px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: var(--font-main);
+            color: var(--text-main);
+            background-color: var(--bg-content);
+            line-height: 1.8;
+            height: 100vh;
+            overflow: hidden; /* 防止整個 body 捲動，改為區域捲動 */
+            display: flex;
+        }
+
+        /* --- 側邊導覽列 (Sidebar) --- */
+        .sidebar {
+            width: var(--sidebar-width);
+            background-color: var(--bg-sidebar);
+            color: var(--white);
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            flex-shrink: 0;
+            box-shadow: 4px 0 10px rgba(0,0,0,0.1);
+            z-index: 100;
+        }
+
+        .logo-area {
+            padding: 2rem;
+            background-color: rgba(0,0,0,0.2);
+            text-align: center;
+        }
+
+        .logo-area h1 {
+            font-family: var(--font-serif);
+            font-size: 1.5rem;
+            letter-spacing: 1px;
+            color: var(--white);
+        }
+        
+        .logo-subtitle {
+            font-size: 0.8rem;
+            color: #a0aec0;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .nav-menu {
+            flex-grow: 1;
+            padding: 2rem 0;
+            overflow-y: auto;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem 2rem;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid transparent;
+            color: #cbd5e0;
+            font-weight: 500;
+        }
+
+        .nav-item:hover {
+            background-color: rgba(255,255,255,0.05);
+            color: var(--white);
+        }
+
+        .nav-item.active {
+            background-color: rgba(49, 151, 149, 0.15);
+            color: var(--secondary-color);
+            border-left-color: var(--secondary-color);
+        }
+
+        .nav-item i {
+            margin-right: 15px;
+            width: 20px;
+            text-align: center;
+        }
+
+        .sidebar-footer {
+            padding: 1.5rem;
+            font-size: 0.8rem;
+            color: #718096;
+            text-align: center;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+
+        /* --- 主內容區塊 (Main Content) --- */
+        .main-content {
+            flex-grow: 1;
+            height: 100%;
+            overflow-y: auto; /* 內容區獨立捲動 */
+            position: relative;
+            scroll-behavior: smooth;
+        }
+
+        /* 隱藏所有區塊，透過 JS 切換顯示 */
+        .content-section {
+            display: none;
+            animation: fadeIn 0.5s ease-out;
+            min-height: 100%;
+        }
+
+        .content-section.active {
+            display: block;
+        }
+
+        /* --- 頁面標頭 (Header for each page) --- */
+        .page-header {
+            height: 300px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            display: flex;
+            align-items: flex-end;
+            padding: 2rem 3rem;
+        }
+
+        .page-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.8));
+        }
+
+        .header-title {
+            position: relative;
+            z-index: 10;
+            color: var(--white);
+            max-width: 800px;
+        }
+
+        .header-title h2 {
+            font-family: var(--font-serif);
+            font-size: 2.8rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+        }
+
+        .header-title p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+        }
+
+        /* --- 文章內容樣式 --- */
+        .article-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 3rem 3rem 6rem 3rem;
+        }
+
+        .intro-lead {
+            font-size: 1.25rem;
+            color: var(--text-main);
+            border-left: 5px solid var(--secondary-color);
+            padding-left: 1.5rem;
+            margin-bottom: 3rem;
+            font-weight: 500;
+        }
+
+        .content-block {
+            margin-bottom: 4rem;
+        }
+
+        .content-block h3 {
+            font-size: 1.8rem;
+            color: var(--primary-color);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .content-block h3 i {
+            font-size: 1.4rem;
+            color: var(--secondary-color);
+        }
+
+        .content-block p {
+            margin-bottom: 1.2rem;
+            text-align: justify;
+        }
+
+        /* 雙欄圖文排版 */
+        .grid-2-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 3rem;
+            align-items: start;
+            margin-top: 2rem;
+        }
+
+        .grid-img {
+            border-radius: 12px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            width: 100%;
+            height: auto;
+        }
+
+        /* 列表樣式 */
+        .feature-list {
+            list-style: none;
+        }
+
+        .feature-list li {
+            position: relative;
+            padding-left: 2rem;
+            margin-bottom: 1rem;
+            font-weight: 500;
+            color: var(--text-main);
+        }
+
+        .feature-list li::before {
+            content: '\f00c'; /* FontAwesome check icon */
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            left: 0;
+            color: var(--secondary-color);
+        }
+        
+        /* 影片容器 */
+        .video-wrapper {
+            position: relative;
+            padding-bottom: 56.25%; /* 16:9 */
+            height: 0;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin: 2rem 0;
+        }
+        
+        .video-wrapper iframe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* --- 手機版適配 (Mobile) --- */
+        @media (max-width: 900px) {
+            body {
+                flex-direction: column;
+                height: auto;
+                overflow: auto;
+            }
+
+            .sidebar {
+                width: 100%;
+                height: auto;
+                position: sticky;
+                top: 0;
+                flex-direction: row;
+                justify-content: space-between;
+                align-items: center;
+                padding: 0 1rem;
+                z-index: 1000;
+            }
+            
+            .logo-area {
+                padding: 1rem 0;
+                background: none;
+                text-align: left;
+            }
+            
+            .logo-area h1 {
+                font-size: 1.2rem;
+            }
+            
+            .logo-subtitle {
+                display: none;
+            }
+
+            .nav-menu {
+                display: flex; /* 改為水平排列 */
+                padding: 0;
+                overflow-x: auto; /* 允許橫向捲動 */
+                flex-grow: 0;
+                margin-left: auto;
+            }
+
+            .nav-item {
+                padding: 1rem;
+                font-size: 0.9rem;
+                white-space: nowrap;
+                border-left: none;
+                border-bottom: 3px solid transparent;
+            }
+
+            .nav-item.active {
+                border-bottom-color: var(--secondary-color);
+                border-left-color: transparent;
+                background: transparent;
+            }
+            
+            .nav-item i {
+                display: none; /* 手機版隱藏圖示以節省空間 */
+            }
+            
+            .sidebar-footer {
+                display: none;
+            }
+
+            .main-content {
+                height: auto;
+                overflow: visible;
+            }
+            
+            .page-header {
+                height: 200px;
+                padding: 1.5rem;
+            }
+            
+            .header-title h2 {
+                font-size: 1.8rem;
+            }
+            
+            .article-container {
+                padding: 2rem 1.5rem;
+            }
+            
+            .grid-2-col {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .intro-lead {
+                font-size: 1.1rem;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 側邊導覽選單 -->
+    <nav class="sidebar">
+        <div class="logo-area">
+            <h1>VET MEDICINE</h1>
+            <div class="logo-subtitle">Comprehensive Guide</div>
+        </div>
+        
+        <div class="nav-menu">
+            <div class="nav-item active" onclick="switchTab('home')">
+                <i class="fas fa-home"></i> 首頁概覽
+            </div>
+            <div class="nav-item" onclick="switchTab('basic')">
+                <i class="fas fa-microscope"></i> 基礎獸醫學
+            </div>
+            <div class="nav-item" onclick="switchTab('clinical')">
+                <i class="fas fa-stethoscope"></i> 臨床獸醫學
+            </div>
+            <div class="nav-item" onclick="switchTab('preventive')">
+                <i class="fas fa-shield-virus"></i> 預防獸醫學
+            </div>
+            <div class="nav-item" onclick="switchTab('comparative')">
+                <i class="fas fa-dna"></i> 比較醫學
+            </div>
+        </div>
+
+        <div class="sidebar-footer">
+            &copy; 2025 VetMed Intro<br>Designed for Education
+        </div>
+    </nav>
+
+    <!-- 主內容區域 -->
+    <main class="main-content">
+
+        <!-- 1. 首頁 (Home) -->
+        <section id="home" class="content-section active">
+            <div class="page-header" style="background-image: url('https://images.unsplash.com/photo-1599443015574-be5fe8a05783?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="header-title">
+                    <h2>歡迎來到獸醫學的世界</h2>
+                    <p>不僅是醫治動物，更是守護人類與環境的綜合科學。</p>
+                </div>
+            </div>
+            
+            <div class="article-container">
+                <p class="intro-lead">
+                    獸醫學（Veterinary Medicine）是醫學的一個分支，專門從事動物疾病的預防、診斷和治療，以及動物與人類之間的疾病傳播控制。
+                </p>
+                
+                <div class="grid-2-col">
+                    <div>
+                        <h3 style="color: var(--primary-color); margin-bottom: 1rem;">學科總覽</h3>
+                        <p>成為一名獸醫師（DVM/BVM）是一條漫長而嚴謹的道路。學生必須掌握從分子生物學到複雜外科手術的廣泛知識。</p>
+                        <p>獸醫教育通常分為兩個主要階段：</p>
+                        <ul class="feature-list" style="margin-top: 1rem;">
+                            <li><strong>臨床前階段：</strong>建立對正常生理結構與致病機制的深刻理解。</li>
+                            <li><strong>臨床階段：</strong>在教學醫院進行實習，將理論應用於實際病例。</li>
+                        </ul>
+                    </div>
+                    <div>
+                        <img src="https://images.unsplash.com/photo-1576201836106-db1758fd1c97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Vet Student" class="grid-img">
+                    </div>
+                </div>
+
+                <div class="content-block" style="margin-top: 4rem;">
+                    <h3><i class="fas fa-video"></i> 影音導覽：獸醫學的多重面貌</h3>
+                    <p>許多人認為獸醫只是「幫小狗打針」，但事實上，獸醫的職涯光譜極廣。請觀看以下影片了解更多。</p>
+                    <div class="video-wrapper">
+                        <!-- AVMA Video -->
+                        <iframe src="https://www.youtube.com/embed/3mglX7PCoaI" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. 基礎獸醫學 (Basic Medicine) -->
+        <section id="basic" class="content-section">
+            <div class="page-header" style="background-image: url('https://images.unsplash.com/photo-1579165466741-7f35a4755657?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="header-title">
+                    <h2>基礎獸醫學</h2>
+                    <p>Basic Veterinary Medicine — 醫學的語言與基石</p>
+                </div>
+            </div>
+
+            <div class="article-container">
+                <p class="intro-lead">
+                    在能夠治療疾病之前，醫師必須先徹底了解「什麼是正常」。基礎獸醫學就是探索生命體正常運作機制，以及當機制被破壞時會發生什麼事（病理）的學問。
+                </p>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-bone"></i> 形態與功能：解剖與生理</h3>
+                    <div class="grid-2-col" style="margin-top: 1rem;">
+                        <img src="https://images.unsplash.com/photo-1532094349884-543bc11b234d?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="grid-img" alt="Microscope">
+                        <div>
+                            <p><strong>解剖學 (Anatomy)</strong>：不僅是記憶骨頭名稱，更包含「大體解剖」與「顯微解剖（組織學）」。獸醫師必須能在腦海中構建出動物體內的3D地圖，這是外科手術的基礎。</p>
+                            <p><strong>生理學 (Physiology)</strong>：研究細胞與器官如何運作。例如：腎臟如何過濾血液？心臟電位如何傳導？賀爾蒙如何調節發情週期？</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-biohazard"></i> 致病機制：當平衡被破壞</h3>
+                    <p>當學生掌握了正常生理後，接著進入異常狀態的研究：</p>
+                    <ul class="feature-list">
+                        <li><strong>病理學 (Pathology)</strong>：被稱為「醫學之母」。透過顯微鏡觀察細胞的病變（壞死、發炎、腫瘤化），是確診疾病的黃金標準。</li>
+                        <li><strong>藥理學 (Pharmacology)</strong>：研究藥物在體內的吸收、分佈、代謝與排泄（ADME）。了解藥物如何與受體結合來改變生理反應，是內科治療的核心。</li>
+                        <li><strong>免疫學 (Immunology)</strong>：探討身體如何分辨「自我」與「非我」。這是疫苗研發與自體免疫疾病治療的基礎。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 3. 臨床獸醫學 (Clinical Medicine) -->
+        <section id="clinical" class="content-section">
+            <div class="page-header" style="background-image: url('https://images.unsplash.com/photo-1628009368231-7603358486cf?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="header-title">
+                    <h2>臨床獸醫學</h2>
+                    <p>Clinical Veterinary Medicine — 診斷、治療與照護的藝術</p>
+                </div>
+            </div>
+
+            <div class="article-container">
+                <p class="intro-lead">
+                    臨床獸醫學是將基礎知識整合並應用於病患身上的過程。這是一個高度分工的領域，依據治療對象的不同，主要分為「伴侶動物」與「經濟動物」兩大體系。
+                </p>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-cat"></i> 伴侶動物醫學 (Small Animal Medicine)</h3>
+                    <p>針對犬、貓及非傳統寵物（兔、鼠、爬蟲類）。現代伴侶動物醫療的水準已直追人類醫學。</p>
+                    <div class="grid-2-col">
+                        <div>
+                            <p><strong>分科精細化</strong>：</p>
+                            <ul class="feature-list">
+                                <li><strong>內科</strong>：心臟科、腎臟科、內分泌科（糖尿病、庫欣氏症管理）。</li>
+                                <li><strong>外科</strong>：骨科（骨折修復、人工關節）、軟組織外科、微創手術。</li>
+                                <li><strong>專科</strong>：眼科（白內障手術）、皮膚科、牙科、腫瘤科（化療與放療）。</li>
+                                <li><strong>高階影像</strong>：CT（電腦斷層）、MRI（核磁共振）已成為神經疾病診斷的標準工具。</li>
+                            </ul>
+                        </div>
+                        <img src="https://images.unsplash.com/photo-1584515933487-779824d29309?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="grid-img" alt="Surgery">
+                    </div>
+                </div>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-cow"></i> 經濟動物醫學 (Large Animal Medicine)</h3>
+                    <p>針對牛、羊、豬、家禽等。這類獸醫師的目標不僅是單一動物的存活，更重視<strong>「群體健康管理」</strong>與<strong>「經濟效益」</strong>。</p>
+                    <ul class="feature-list">
+                        <li><strong>產科與繁殖</strong>：透過直腸觸診與超音波確認懷孕，處理難產，提升牧場繁殖率。</li>
+                        <li><strong>營養與代謝病</strong>：調配飼料配方，預防乳牛常見的酮病（Ketosis）或乳熱（Milk Fever）。</li>
+                        <li><strong>群體防疫</strong>：設計疫苗計畫，阻斷口蹄疫、禽流感等重大傳染病在牧場內擴散。</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- 4. 預防獸醫學 (Preventive Medicine) -->
+        <section id="preventive" class="content-section">
+            <div class="page-header" style="background-image: url('https://images.unsplash.com/photo-1583912267670-6575ad43263d?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="header-title">
+                    <h2>預防獸醫學</h2>
+                    <p>Preventive Medicine — 公共衛生與食品安全的守門員</p>
+                </div>
+            </div>
+
+            <div class="article-container">
+                <p class="intro-lead">
+                    「預防勝於治療」。此領域關注的是傳染病在群體中的動態，以及如何切斷動物疾病傳播給人類的途徑。這是獸醫學對人類社會貢獻最直接的領域。
+                </p>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-globe-americas"></i> 一體健康 (One Health)</h3>
+                    <p>約有 60% 的人類病原體來自動物，而 75% 的新興傳染病（如 COVID-19, SARS, Ebola）是人畜共通的。預防獸醫學站在這場戰役的最前線。</p>
+                    <div class="video-wrapper">
+                         <!-- One Health Video placeholder/image concept -->
+                         <img src="https://images.unsplash.com/photo-1584467735815-f778f274e296?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80" style="width:100%; height:100%; object-fit:cover;" alt="Global Health">
+                         <div style="position:absolute; bottom:20px; left:20px; background:rgba(0,0,0,0.7); color:white; padding:10px; border-radius:5px;">
+                             示意圖：One Health 強調人類、動物與環境健康的連結
+                         </div>
+                    </div>
+                </div>
+
+                <div class="grid-2-col">
+                    <div class="content-block">
+                        <h3><i class="fas fa-viruses"></i> 人畜共通傳染病 (Zoonosis)</h3>
+                        <p>獸醫師負責監控並控制如狂犬病（Rabies）、布氏桿菌症、結核病等危險疾病。</p>
+                        <p>透過為犬貓施打狂犬病疫苗，我們實際上是在保護人類免受這種致死率近乎 100% 的病毒威脅。</p>
+                    </div>
+                    <div class="content-block">
+                        <h3><i class="fas fa-drumstick-bite"></i> 食品衛生安全</h3>
+                        <p>您餐桌上的肉品、蛋奶都經過獸醫師的把關。</p>
+                        <ul class="feature-list">
+                            <li><strong>屠宰衛生檢查</strong>：在屠宰場剔除患病家畜。</li>
+                            <li><strong>藥物殘留檢驗</strong>：確保肉品中沒有抗生素或生長激素殘留。</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 5. 比較醫學 (Comparative Medicine) -->
+        <section id="comparative" class="content-section">
+            <div class="page-header" style="background-image: url('https://images.unsplash.com/photo-1530210124550-912dc1381cb8?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');">
+                <div class="header-title">
+                    <h2>比較醫學與研究</h2>
+                    <p>Comparative Medicine — 跨物種的生物醫學橋樑</p>
+                </div>
+            </div>
+
+            <div class="article-container">
+                <p class="intro-lead">
+                    比較醫學利用動物模式（Animal Models）來研究人類疾病的機制與治療方法。由於許多哺乳類動物的基因與生理構造與人類高度相似，這使得獸醫學成為生物醫學研究中不可或缺的一環。
+                </p>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-flask"></i> 轉譯醫學 (Translational Medicine)</h3>
+                    <p>從實驗室到病床（Bench to Bedside）。許多現代醫學突破都依賴比較醫學：</p>
+                    <ul class="feature-list">
+                        <li><strong>癌症研究</strong>：利用基因轉殖小鼠研究腫瘤生長機制與測試抗癌新藥。</li>
+                        <li><strong>疫苗開發</strong>：COVID-19 疫苗在人體試驗前，必須先在動物身上確認安全性與有效性。</li>
+                        <li><strong>再生醫學</strong>：利用幹細胞治療脊髓損傷或心臟衰竭的研究。</li>
+                    </ul>
+                </div>
+
+                <div class="content-block">
+                    <h3><i class="fas fa-heart"></i> 實驗動物福祉與 3R 原則</h3>
+                    <p>獸醫師在研究機構中扮演「動物福祉守護者」的角色，確保實驗符合倫理規範，並嚴格執行 3R 原則：</p>
+                    <div class="grid-2-col" style="margin-top:0;">
+                        <ul class="feature-list">
+                            <li><strong>替代 (Replacement)</strong>：盡量使用細胞培養或電腦模擬取代活體動物。</li>
+                            <li><strong>減量 (Reduction)</strong>：使用最少的動物數量達到統計意義。</li>
+                            <li><strong>精緻化 (Refinement)</strong>：優化實驗流程，將動物的痛苦與緊迫降至最低（例如給予止痛藥、豐富化飼養環境）。</li>
+                        </ul>
+                        <img src="https://images.unsplash.com/photo-1505751172876-fa1923c5c528?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" class="grid-img" alt="Lab Research">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JavaScript 控制頁面切換 -->
+    <script>
+        function switchTab(tabId) {
+            // 1. 移除導覽列 active 狀態
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+
+            // 2. 設定點擊項目為 active
+            // 這裡透過遍歷比對 onclick 屬性或是簡單的索引來處理樣式
+            // 為求精確，我們根據 tabId 反查
+            const navItems = document.querySelectorAll('.nav-item');
+            if(tabId === 'home') navItems[0].classList.add('active');
+            if(tabId === 'basic') navItems[1].classList.add('active');
+            if(tabId === 'clinical') navItems[2].classList.add('active');
+            if(tabId === 'preventive') navItems[3].classList.add('active');
+            if(tabId === 'comparative') navItems[4].classList.add('active');
+
+            // 3. 隱藏所有內容區塊
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // 4. 顯示目標區塊
+            const targetSection = document.getElementById(tabId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                // 切換後自動回到頂部
+                document.querySelector('.main-content').scrollTop = 0;
+            }
+        }
+    </script>
+</body>
+</html>
